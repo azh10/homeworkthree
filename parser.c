@@ -46,13 +46,13 @@ int procLevel = 0;
 
 // array of all the reserved word/symbols
 char table[34][12] = {
-  "\0","\0","var","num","+","-",
-  "*","/","odd","=","!=",
-  "<","<=",">",">=","(",
-  ")",",",";",".",":=",
-  "begin","end","if","then","while",
-  "do","call","Const","Var","Proc",
-  "write","read","else"
+	"\0","\0","var","num","+","-",
+	"*","/","odd","=","!=",
+	"<","<=",">",">=","(",
+	")",",",";",".",":=",
+	"begin","end","if","then","while",
+	"do","call","Const","Var","Proc",
+	"write","read","else"
 };
 
 // the printable error messages stored in an array
@@ -103,12 +103,12 @@ int error( int number ){
 
 // this table checks if the symbol is in the table, if not add to table
 void addTo( symbol s ){
-  int temp = 0;
-  
-  while( temp<symCounter ){
-    if( !strcmp(s.name, symbol_table[temp++].name) ) return;
-  }
-  symbol_table[symCounter++] = s;
+	int temp = 0;
+	 
+	while( temp<symCounter ){
+		if( !strcmp(s.name, symbol_table[temp++].name) ) return;
+	}
+	symbol_table[symCounter++] = s;
 }
 
 /**///need to finish implementing this
@@ -149,22 +149,22 @@ int program(){
  *  - 1 statement             (or none)
  */
 int block(){
-
+	
 	if( currentToken == constsym ){
 		// the token is a constant symbol, test this declaration
 		if( !constdec() ) return 0;
 	}
-
+	
 	if( currentToken == varsym ){
 		// the token is a variable symbol, test this declaration
 		if( !vardec() ) return 0;
 	}
-
+	
 	if( currentToken == procsym ){
 		// the token is a procedure symbol, test this declaration
 		if( !procdec() ) return 0;
 	}
-
+	
 	// now test the statement at the end of the block
 	return statement();
 }
@@ -178,12 +178,12 @@ int block(){
  *  - 1 "semicolonsym" token
  */
 int constdec(){
-
+	
 	// set the temp symbol to have CONST kind value and clear fields
 	//   the fields will be refilled in as the information is parsed
 	s.kind = CONST;
 	s.val = s.level = s.addr = -1;
-
+	
 	// loop till "ident eql number semicolon" pattern is found
 	//   note: commas can replace a semicolon and restart the pattern without error
 	do{
@@ -201,11 +201,11 @@ int constdec(){
 		if( currentToken != eqlsym )
 			if( currentToken == becomessym ) return error(1); // := not = error
 			else return error(3);                             // anyother error
-
+		
 		// get token and test for third pattern piece "numbersym"
 		getToken();
 		if( currentToken != numbersym ) return error(2);    // not a num error
-
+		
 		// a number was found the next token is its value
 		getToken();
 		if( currentToken >= 100000 ) return error(25);      // num too large error
@@ -213,12 +213,12 @@ int constdec(){
 		
 		// we reached the end of one constant declaration (try to) add to table
 		addTo( s );
-
+		
 		// get the next token to decide if the declaration statement continues
 		getToken();
-
+		  
 	}while( currentToken == commasym ); // seperated by commas
-
+	
 	if( currentToken != semicolonsym ) return error(5); // expected ; error
 	
 	// done with declaration statement get the next token
@@ -237,11 +237,11 @@ int vardec(){
 	//   the fields will be refilled in as the information is parsed
 	s.kind = VAR;
 	s.val = s.level = s.addr = -1;
-
+	
 	// loop till "ident semicolon" pattern is found
 	//   note: commas can replace a semicolon and restart the patter without error
 	do{
-
+		
 		// get token and test for the first pattern piece "identsym"
 		getToken();
 		if( currentToken != identsym ) return error(4);     // no ident error
@@ -314,7 +314,7 @@ int procdec(){
 		// get token decided if there is another procedure to be declared
 		getToken();
 	}while( currentToken == procsym );
-
+	
 	return 1;
 }
 
@@ -343,7 +343,7 @@ int statement(){
 		// get token and test the expression
 		getToken();
 		if( !expression() ) return 0;
-
+		
 	// test for first pattern piece "callsym"
 	}else if( currentToken == callsym ){
 		
@@ -410,7 +410,7 @@ int statement(){
 	/*
 	// test for first pattern piece "readsym"
 	}else if( currentToken == readsym ){
-
+		
 		// get token and test for second pattern piece "identsym"
 		getToken();
 		if( currentToken != identsym ) return error(14);	  // no ident error
@@ -421,7 +421,7 @@ int statement(){
 		// get token and test for second pattern piece "identsym"
 		getToken();
 		if( currentToken != identsym ) return error(14);	  // no ident error
-
+		
 	}
 	*/
 	
@@ -455,7 +455,7 @@ int expression(){
  *    ii.   "expression() relation() expression()"
  */
 int condition(){
-
+	
 	// test for first pattern piecet "oddsym"
 	if( currentToken == oddsym ){
 		
@@ -489,8 +489,8 @@ int term(){
 	
 	// while optional "multsym" or "slashsym" found test the factor
 	while( currentToken == multsym || currentToken == slashsym ){
-    
-    // get token and test
+		    
+		// get token and test
 		getToken();
 		if( !factor() ) return 0;                           // error
 	}
@@ -508,7 +508,7 @@ int factor(){
 	// test for first patterm piece "identsym"
 	if( currentToken == identsym ){
 		getToken();
-	
+		
 	// test for first pattern piece "number"
 	}else if( currentToken == numbersym ){
 		
@@ -528,9 +528,9 @@ int factor(){
 		
 		// get token carry on
 		getToken();
-
+		
 	}else	return error(23);                               // bad factor error
-
+	
 	// get token carry on
 	getToken();
 	return 1;
@@ -552,34 +552,34 @@ int relation(){
 }
 
 int main( int argc, char *argv[] ){
- 
+	 
 	/**/// simply way to print lexemelist if run with -l*
 	if( argc > 1 ){
 		if( argv[1][0] == '-' && argv[1][1] == 'l' ){
 			fp = fopen( "lexemelist.txt","r" );
- 			buffer = (char *)malloc( 10000 );
+			buffer = (char *)malloc( 10000 );
 			fscanf(fp, "%[^\n]\n", buffer );
-  		printf("Lexemelist:\n%s\n\n", buffer );
+			printf("Lexemelist:\n%s\n\n", buffer );
 			fclose( fp );
 		}
 	}
-
-  fp = fopen( "lexemelist.txt","r" );
-  int i, current = 0;
-  buffer = (char *)malloc(12);
-
+	
+	fp = fopen( "lexemelist.txt","r" );
+	int i, current = 0;
+	buffer = (char *)malloc(12);
+	
 	program();
-
+	
 	// testing the symboltable
 	///**/printf( "\n\nkind\tname\tlevel\tvalue\n" );
-  for( i=0; i<symCounter; i++ ){
-    s = symbol_table[i];
-    ///**/printf( "%s\t%s\t%i\t%i\n", identable[s.kind], s.name, s.level, s.val );
-  }
+	for( i=0; i<symCounter; i++ ){
+		s = symbol_table[i];
+	///**/printf( "%s\t%s\t%i\t%i\n", identable[s.kind], s.name, s.level, s.val );
+	}
 	///**/printf( "\n" );
 	
 	fclose( fp );
-  	
+		
 	
-  return 0;
+	return 0;
 }
